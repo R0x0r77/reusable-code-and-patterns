@@ -2,7 +2,8 @@ package data_structures_test.queue;
 
 import data_structures_test.exceptions.MyException;
 
-public class MyQueue<T extends Double> {	// extending double (which is stupid, because no generics is needed at all) just to create method sum
+
+public class MyQueue<T> {
 
 	private Node<T> front = null;
 	private Node<T> rear = null;
@@ -21,12 +22,13 @@ public class MyQueue<T extends Double> {	// extending double (which is stupid, b
 	public MyQueue() {}
 	
 	public void enqueue(T data) {
-		Node<T> oldLast = rear;
-		rear = new Node<>(data, null);
-		if (isEmpty())
-			front = oldLast;
-		else
-			oldLast = rear.next;
+		Node<T> newNode = new Node<>(data, null);
+		if (isEmpty()) {
+			front = rear = newNode;
+		} else {
+			rear.next = newNode;
+			rear = newNode;
+		}
 		elements++;
 	}
 	
@@ -45,20 +47,6 @@ public class MyQueue<T extends Double> {	// extending double (which is stupid, b
 		return front.data;
 	}
 	
-	public T sum(int begin, int end) throws MyException {
-		if (elements < end) throw new MyException("queue has only " + elements + " elements");
-		if (begin < 1 || end < 1 || begin > end) throw new IllegalArgumentException("bad arguments");
-		Node<T> next = front;
-		Double sum = (double) 0;
-		for (int i = 1; i < begin; i++)
-			next = next.next;
-		for (int i = begin; i < end; i++) {
-			sum += next.data;
-			next = next.next;
-		}
-		return (T) sum;
-			
-	}
 	
 	public boolean isEmpty() {
 		return front == null;
